@@ -7,6 +7,7 @@ package DAO;
 
 import com.mycompany.travelpoint.domain.Trip;
 import com.mycompany.travelpoint.domain.User;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -30,9 +31,12 @@ public class TripDAOJPA extends Facade<Trip> implements TripDAO {
 
     @PersistenceContext(unitName = "persistence")
     private EntityManager em;
+    UserDAOJPA userDAOJPA;
+
 
     public TripDAOJPA() {
         super(Trip.class);
+        userDAOJPA = new UserDAOJPA();
     }
 
     public TripDAOJPA(Class<Trip> entityClass) {
@@ -78,6 +82,52 @@ public class TripDAOJPA extends Facade<Trip> implements TripDAO {
         return result;
     }
     
+    public Trip addFollower(User user,  String tripname){
+        Trip t = findByName(tripname);
+        ArrayList<User> followers = (ArrayList<User>) t.getFollowingUsers();
+        followers.add(user);
+        t.setFollowingUsers(followers);
+        em.persist(t);
+        return t;
+    }
+    
+    public Trip removeFollower(User user, String tripname){
+        Trip t = findByName(tripname);
+        ArrayList<User> followers = (ArrayList<User>) t.getFollowingUsers();
+        followers.remove(user);
+        em.persist(t);
+        return t;
+    }
+    
+        public Trip addFollower(String username,  String tripname){
+        Trip t = findByName(tripname);
+        ArrayList<User> followers = (ArrayList<User>) t.getFollowingUsers();
+        User user = userDAOJPA.findbyUsername(username);
+        followers.add(user);
+        t.setFollowingUsers(followers);
+        em.persist(t);
+        return t;
+    }
+    
+    public Trip removeFollower(String username, String tripname){
+        Trip t = findByName(tripname);
+        ArrayList<User> followers = (ArrayList<User>) t.getFollowingUsers();
+        User user = userDAOJPA.findbyUsername(username);
+        followers.remove(user);
+        em.persist(t);
+        return t;
+    }
+    public Trip addTripTaker(String username,Trip trip){
+        User user = userDAOJPA.findbyUsername(username);
+        trip.setTripTaker(user);
+        em.persist(trip);
+        
+        ArrayList<Trip> trips = (ArrayList<Trip>) user.getTrips();
+        trips.add(trip);
+        user.setTrips(trips);
+        em.persist(user);
+        return trip;
+    }
     public void setEm(EntityManager em) {
         this.em = em;
     }
