@@ -5,9 +5,11 @@
  */
 package Services;
 
+import DAO.JPA;
 import DAO.TripDAOJPA;
 import com.mycompany.travelpoint.domain.Trip;
 import java.util.List;
+import javax.inject.Inject;
 
 /**
  *
@@ -15,6 +17,8 @@ import java.util.List;
  */
 public class TripService {
 
+    @Inject
+    @JPA
     public TripDAOJPA tripDAOJPA;
 
     public void create(Trip trip) {
@@ -40,4 +44,5 @@ public class TripService {
     public List<Trip> getAllTripsOfUser(String username) {
         return tripDAOJPA.getAllTripsOfUser(username);
     }
+    
 }

@@ -63,10 +63,10 @@ public class RestAssuredTrip {
     @Test
     public void addTrip() {
 
-        User user = new User("LucDam", "Luc", "Damhuis", "01-01-1993", "ldamhuis@hotmail.com", null);
+        User user = new User("LucDam", "Luc", "Damhuis", "01-01-1993", "ldamhuis@hotmail.com", "password");
         List<Step> steps = new ArrayList<Step>();
-        steps.add(new Step("teststep", "testdesctription", 10.0, 11.0, 12.0, 13.0, null));
-        Trip trip = new Trip(Long.valueOf(1), "test", "desc", user, steps, 20.0, 21.0, 22.0, 23.0, null);
+        steps.add(new Step("teststep", "testdesctription", 10.0, 11.0, 12.0, 13.0));
+        Trip trip = new Trip("Test", "testdesc", user, 0.0, 0.0, 0.0, 0.0);
 
         Trip tr = given().
                 contentType("application/json").

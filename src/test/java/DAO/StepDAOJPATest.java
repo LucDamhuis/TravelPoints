@@ -7,6 +7,7 @@ package DAO;
 
 import com.mycompany.travelpoint.domain.Step;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
@@ -27,7 +28,7 @@ import util.DatabaseCleaner;
  */
 public class StepDAOJPATest {
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("persist");
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("TestPU");
     private EntityManager em;
     private EntityTransaction tx;
     private StepDAOJPA stepDAOJPA;
@@ -36,12 +37,10 @@ public class StepDAOJPATest {
     }
 
     @Before
-    public void setUp() {
-        try {
-            new DatabaseCleaner(emf.createEntityManager()).clean();
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAOJPATest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void setUp() throws SQLException {
+
+        new DatabaseCleaner(emf.createEntityManager()).clean();
+
         em = emf.createEntityManager();
         tx = em.getTransaction();
 
@@ -61,9 +60,12 @@ public class StepDAOJPATest {
     @org.junit.Test
     public void testCreateAndFind() {
         try {
-            Step step = new Step("teststep", "testdesctription", 10.0, 11.0, 12.0, 13.0, null);
+            tx.begin();
+            Step step = new Step("TestStep", "Step for test purposes", 0.0, 0.0, 0.0, 0.0);
             stepDAOJPA.create(step);
-            Step dbStep = stepDAOJPA.findByName("test");
+            tx.commit();
+            List<Step> dbsteps = stepDAOJPA.findAll();
+            Step dbStep = stepDAOJPA.findByName("teststep");
             assertNotNull(dbStep);
         } catch (Exception e) {
             System.out.println(e);
@@ -73,24 +75,31 @@ public class StepDAOJPATest {
 
     @org.junit.Test
     public void testEdit() {
-        Step step = new Step("teststep", "testdesctription", 10.0, 11.0, 12.0, 13.0, null);
+        tx.begin();
+        Step step = new Step("TestStep", "Step for test purposes", 0.0, 0.0, 0.0, 0.0);
         stepDAOJPA.create(step);
+        tx.commit();
+        tx.begin();
         step.setName("newname");
         stepDAOJPA.edit(step);
+        tx.commit();
         Step dbStep = stepDAOJPA.findByName("newname");
         assertEquals(dbStep.getName(), "newname");
     }
 
     @org.junit.Test
     public void testRemove() {
-        Step step = new Step("teststep", "testdesctription", 10.0, 11.0, 12.0, 13.0, null);
-        Step step2 = new Step("teststep", "testdesctription", 10.0, 11.0, 12.0, 13.0, null);
+        tx.begin();
+        Step step = new Step("TestStep", "Step for test purposes", 0.0, 0.0, 0.0, 0.0);
+        Step step2 = new Step("teststep", "testdesctription", 10.0, 11.0, 12.0, 13.0);
         stepDAOJPA.create(step);
         stepDAOJPA.create(step2);
+        tx.commit();
+        tx.begin();
         int beforeremove = stepDAOJPA.findAll().size();
         stepDAOJPA.remove(step2);
+        tx.commit();
         int afterremove = stepDAOJPA.findAll().size();
         assertEquals(beforeremove, afterremove + 1);
-
     }
 }

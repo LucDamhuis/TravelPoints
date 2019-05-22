@@ -5,9 +5,12 @@
  */
 package DAO;
 
+import com.mycompany.travelpoint.domain.Step;
+import com.mycompany.travelpoint.domain.Trip;
 import com.mycompany.travelpoint.domain.User;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,6 +31,11 @@ import javax.ws.rs.Produces;
 @Stateless
 @JPA
 public class UserDAOJPA extends Facade<User> implements UserDAO {
+    @EJB
+    private TripDAOJPA tripDAOJPA;
+    
+    @EJB
+    private StepDAOJPA StepDAOJPA;
 
     @PersistenceContext(unitName = "persist")
     private EntityManager em;
@@ -84,6 +92,34 @@ public class UserDAOJPA extends Facade<User> implements UserDAO {
     }
         
     
+    public User addTrip(User user, Trip trip){
+        List<Trip> trips = user.getTrips();
+        trips.add(trip);
+        em.persist(user);
+        
+        trip.setTripTaker(user);
+        tripDAOJPA.edit(trip);
+        
+        return user;
+    }
+    
+    public User addFollowingTrip(User user,Trip trip){
+        user.addFollowingTrip(trip);
+        em.persist(user);
+        
+        trip.addFollwingUsers(user);
+        tripDAOJPA.edit(trip);
+        return user;
+    }
+    
+    public User addFollowingStep(User user, Step step){
+        user.addFollowingStep(step);
+        em.persist(user);
+        
+        step.addFollwingUsers(user);
+        StepDAOJPA.edit(step);
+        return user;        
+    }
     public void setEm(EntityManager em) {
         this.em = em;
     }

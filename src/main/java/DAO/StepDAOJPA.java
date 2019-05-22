@@ -5,6 +5,7 @@
  */
 package DAO;
 
+import com.mycompany.travelpoint.domain.Comment;
 import com.mycompany.travelpoint.domain.Step;
 import com.mycompany.travelpoint.domain.User;
 import java.util.List;
@@ -55,16 +56,13 @@ public class StepDAOJPA extends Facade<Step> implements StepDAO {
         super.create(entity);
     }
 
-
     public void edit(@PathParam("id") Long id, Step entity) {
         super.edit(entity);
     }
 
-
     public void remove(@PathParam("id") Long id) {
         super.remove(super.find(id));
     }
-
 
     public Step find(@PathParam("id") Long id) {
         return super.find(id);
@@ -73,9 +71,19 @@ public class StepDAOJPA extends Facade<Step> implements StepDAO {
     public List<Step> findAll() {
         return super.findAll();
     }
-    
+
     public void setEm(EntityManager em) {
         this.em = em;
+    }
+
+    public void addComment(Step s, Comment c) {
+        s.addComment(c);
+        em.persist(s);
+    }
+    
+    public void removeComment(Step s,Comment c){
+        s.removeComment(c);
+        em.persist(s);
     }
 
 }

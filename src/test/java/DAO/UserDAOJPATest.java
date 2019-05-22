@@ -26,7 +26,7 @@ import util.DatabaseCleaner;
  */
 public class UserDAOJPATest {
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("persist");
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("TestPU");
     private EntityManager em;
     private EntityTransaction tx;
     private UserDAOJPA userDAOJPA;
@@ -54,11 +54,15 @@ public class UserDAOJPATest {
      */
     @org.junit.Test
     public void testEdit_GenericType() throws Exception {
+        tx.begin();
         System.out.println("edit");
-        User entity = new User("Test", "Luc", "Damhuis", "12-01-1993", "ldamhuis@hotmail.com", null);
+        User entity = new User("Test", "Luc", "Damhuis", "12-01-1993", "ldamhuis@hotmail.com", "password");
         userDAOJPA.create(entity);
+        tx.commit();
+        tx.begin();
         entity.setUsername("LDam");
         userDAOJPA.edit(entity);
+        tx.commit();
         User dbuser = userDAOJPA.findbyUsername("LDam");
         assertEquals(entity, dbuser);
     }
@@ -69,9 +73,13 @@ public class UserDAOJPATest {
     @org.junit.Test
     public void testRemove_GenericType() throws Exception {
         System.out.println("remove");
-        User entity = new User("Test", "Luc", "Damhuis", "12-01-1993", "ldamhuis@hotmail.com", null);
+        tx.begin();
+        User entity = new User("Test", "Luc", "Damhuis", "12-01-1993", "ldamhuis@hotmail.com", "password");
         userDAOJPA.create(entity);
+        tx.commit();
+        tx.begin();
         userDAOJPA.remove(entity);
+        tx.commit();
         User u = userDAOJPA.findbyUsername("Test");
         assertNull(u);
     }
@@ -82,10 +90,12 @@ public class UserDAOJPATest {
     @org.junit.Test
     public void testFindAll() throws Exception {
         System.out.println("findAll");
-        User entity = new User("Test", "Luc", "Damhuis", "12-01-1993", "ldamhuis@hotmail.com", null);
-        User entity2 = new User("Test", "Luc", "Damhuis", "12-01-1993", "ldamhuis@hotmail.com", null);
+        tx.begin();
+        User entity = new User("Test", "Luc", "Damhuis", "12-01-1993", "ldamhuis@hotmail.com", "password");
+        User entity2 = new User("Test", "Luc", "Damhuis", "12-01-1993", "ldamhuis@hotmail.com", "password");
         userDAOJPA.create(entity);
         userDAOJPA.create(entity2);
+        tx.commit();
         List<User> result = userDAOJPA.findAll();
         assertEquals(result.size(), 2);
     }
@@ -96,8 +106,10 @@ public class UserDAOJPATest {
     @org.junit.Test
     public void testCreate() throws Exception {
         System.out.println("create");
-        User entity = new User("Test", "Luc", "Damhuis", "12-01-1993", "ldamhuis@hotmail.com", null);
+        tx.begin();
+        User entity = new User("Test", "Luc", "Damhuis", "12-01-1993", "ldamhuis@hotmail.com", "password");
         userDAOJPA.create(entity);
+        tx.commit();
         User createdUser = userDAOJPA.findbyUsername("Test");
         assertNotNull(createdUser);
     }

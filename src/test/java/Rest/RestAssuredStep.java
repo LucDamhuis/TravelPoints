@@ -62,11 +62,11 @@ public class RestAssuredStep {
     @Test
     public void addStep() {
 
-        User user = new User("LucDam", "Luc", "Damhuis", "01-01-1993", "ldamhuis@hotmail.com", null);
+        User user = new User("LucDam", "Luc", "Damhuis", "01-01-1993", "ldamhuis@hotmail.com","password");
         List<User> users = new ArrayList<User>();
         users.add(user);
-        Step step = new Step("teststep", "testdesctription", 10.0, 11.0, 12.0, 13.0, users);
-
+        Step step = new Step("test", "testdesc", 0.0, 0.0, 0.0, 0.0);
+        step.setFollowingUsers(users);
         Step st = given().
                 contentType("application/json").
                 body(user).

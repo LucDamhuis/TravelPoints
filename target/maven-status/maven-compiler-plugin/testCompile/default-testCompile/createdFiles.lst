@@ -1,9 +1,0 @@
-DAO\UserDAOJPATest.class
-Rest\RestAssuredStep.class
-DAO\UserDAOCollTest.class
-DAO\StepDAOJPATest.class
-DAO\TripDAOJPATest.class
-Rest\RestAssuredUser.class
-DAO\TripDAOCollTest.class
-Rest\RestAssuredTrip.class
-util\DatabaseCleaner.class

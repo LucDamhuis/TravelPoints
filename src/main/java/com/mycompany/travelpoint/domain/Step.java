@@ -10,6 +10,8 @@ package com.mycompany.travelpoint.domain;
  * @author Damhuis
  */
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -36,16 +38,25 @@ public class Step implements Serializable {
 
     private Double endLon;
 
+    @ManyToMany(mappedBy = "followingSteps")
     private List<User> followingUsers;
 
-    public Step(String name, String description, Double startLat, Double startLon, Double endLat, Double endLon, List<User> followingUsers) {
+    @OneToMany()
+    private List<Comment> comments;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date postDate;
+
+    public Step(String name, String description, Double startLat, Double startLon, Double endLat, Double endLon) {
         this.name = name;
         this.description = description;
         this.startLat = startLat;
         this.startLon = startLon;
         this.endLat = endLat;
         this.endLon = endLon;
-        this.followingUsers = followingUsers;
+        this.followingUsers = new ArrayList<>();
+        this.postDate = new Date();
+        this.comments = new ArrayList<>();
     }
 
     public Step() {
@@ -113,6 +124,34 @@ public class Step implements Serializable {
 
     public void setFollowingUsers(List<User> followingUsers) {
         this.followingUsers = followingUsers;
+    }
+
+    public void addFollwingUsers(User user) {
+        if (this.followingUsers.contains(user)) {
+            throw new IllegalArgumentException("User already follows");
+        }
+        this.followingUsers.add(user);
+    }
+
+    public void removeFollwingUsers(User user) {
+        if (!this.followingUsers.contains(user)) {
+            throw new IllegalArgumentException("User doesn't follows");
+        }
+        this.followingUsers.remove(user);
+    }
+
+    public void addComment(Comment comment) {
+        if (this.comments.contains(comment)) {
+            throw new IllegalArgumentException("Comments already exists");
+        }
+        this.comments.add(comment);
+    }
+
+    public void removeComment(Comment comment) {
+        if (!this.comments.contains(comment)) {
+            throw new IllegalArgumentException("Comments already removed");
+        }
+        this.comments.remove(comment);
     }
 
 }

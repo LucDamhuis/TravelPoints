@@ -5,9 +5,12 @@
  */
 package Services;
 
+import DAO.JPA;
 import DAO.StepDAOJPA;
+import com.mycompany.travelpoint.domain.Comment;
 import com.mycompany.travelpoint.domain.Step;
 import java.util.List;
+import javax.inject.Inject;
 
 /**
  *
@@ -15,6 +18,8 @@ import java.util.List;
  */
 public class StepService {
     
+    @Inject
+    @JPA
     public StepDAOJPA stepDAOJPA;
 
     public void create(Step step) {
@@ -35,5 +40,13 @@ public class StepService {
 
     public List<Step> getAllSteps() {
         return stepDAOJPA.findAll();
+    }
+    
+    public void addComment(Step s,Comment c){
+        stepDAOJPA.addComment(s, c);
+    }
+    
+    public void removeComment(Step s, Comment c){
+        stepDAOJPA.removeComment(s, c);
     }
 }

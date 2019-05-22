@@ -36,7 +36,7 @@ public class UserDAOCollTest {
     @Test
     public void testCreate() {
         System.out.println("create");
-        User user = new User("LucD", "Luc", "Damhuis", "01-12-1993", "ldamhuis@hotmail.com", null);
+        User user = new User("LucD", "Luc", "Damhuis", "01-12-1993", "ldamhuis@hotmail.com","password");
         instance.create(user);
         assertEquals(instance.getAll().size(), 1);
     }
@@ -44,7 +44,7 @@ public class UserDAOCollTest {
     @Test
     public void testRemove() {
         System.out.println("remove");
-        User user = new User("LucD", "Luc", "Damhuis", "01-12-1993", "ldamhuis@hotmail.com", null);
+        User user = new User("LucD", "Luc", "Damhuis", "01-12-1993", "ldamhuis@hotmail.com", "password");
         instance.remove(user);
         assertEquals(instance.getAll().size(), 0);
     }
@@ -53,7 +53,7 @@ public class UserDAOCollTest {
     public void testFindbyUsername() {
         System.out.println("findbyUsername");
         String username = "LucD";
-        User user = new User("LucD", "Luc", "Damhuis", "01-12-1993", "ldamhuis@hotmail.com", null);
+        User user = new User("LucD", "Luc", "Damhuis", "01-12-1993", "ldamhuis@hotmail.com", "password");
         instance.create(user);
         User expResult = user;
         User result = instance.findbyUsername(username);
@@ -67,8 +67,8 @@ public class UserDAOCollTest {
         for (User u : result) {
             instance.remove(u);
         }
-        User user = new User("LucD", "Luc", "Damhuis", "01-12-1993", "ldamhuis@hotmail.com", null);
-        User user2 = new User("LucF", "Luc", "Fransen", "01-12-1993", "ldamhuis@hotmail.com", null);
+        User user = new User("LucD", "Luc", "Damhuis", "01-12-1993", "ldamhuis@hotmail.com", "passworder");
+        User user2 = new User("LucF", "Luc", "Fransen", "01-12-1993", "ldamhuis@hotmail.com", "password");
         instance.create(user);
         instance.create(user2);
         List<User> results = instance.getAll();

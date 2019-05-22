@@ -5,7 +5,10 @@
  */
 package com.mycompany.travelpoint.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -27,9 +30,9 @@ public class Trip implements Serializable {
     private Long id;
 
     private String name;
-    
+
     private String description;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User tripTaker;
@@ -42,25 +45,45 @@ public class Trip implements Serializable {
     private double startLon;
 
     private double endLat;
-    
+
     private double endLon;
-    
+
     private List<User> followingUsers;
+
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ", timezone = "CET")
+    private Date startDate;
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ", timezone = "CET")
+    private Date endDate;
 
     public Trip() {
     }
 
-    public Trip(Long id, String name, String description, User tripTaker, List<Step> steps, double startLat, double startLon, double endLat, double endLon,List<User> followingUsers) {
-        this.id = id;
+    public Trip(String name, String description, User tripTaker, double startLat, double startLon, double endLat, double endLon) {
         this.name = name;
         this.description = description;
         this.tripTaker = tripTaker;
-        this.steps = steps;
+        this.steps = new ArrayList<>();
         this.startLat = startLat;
         this.startLon = startLon;
         this.endLat = endLat;
         this.endLon = endLon;
-        this.followingUsers = followingUsers;
+        this.followingUsers = new ArrayList<>();
+    }
+
+    public Trip(String name, String description, User tripTaker, double startLat, double startLon, double endLat, double endLon, Date startDate, Date endDate) {
+        this.name = name;
+        this.description = description;
+        this.tripTaker = tripTaker;
+        this.startLat = startLat;
+        this.startLon = startLon;
+        this.endLat = endLat;
+        this.endLon = endLon;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.followingUsers = new ArrayList<>();
+        this.steps = new ArrayList<>();
     }
 
     public Long getId() {
@@ -98,6 +121,20 @@ public class Trip implements Serializable {
     @XmlTransient
     public List<Step> getSteps() {
         return steps;
+    }
+
+    public void AddStep(Step step) {
+        if (this.steps.contains(step)) {
+            throw new IllegalArgumentException("Step already exists");
+        }
+        this.steps.add(step);
+    }
+
+    public void RemoveStep(Step step) {
+        if (!this.steps.contains(step)) {
+            throw new IllegalArgumentException("Step doenst exists");
+        }
+        this.steps.remove(step);
     }
 
     public void setSteps(List<Step> steps) {
@@ -143,13 +180,32 @@ public class Trip implements Serializable {
     public void setFollowingUsers(List<User> followingUsers) {
         this.followingUsers = followingUsers;
     }
-    
+
+    public void addFollwingUsers(User user) {
+        if (this.followingUsers.contains(user)) {
+            throw new IllegalArgumentException("User already follows");
+        }
+        this.followingUsers.add(user);
+    }
+
+    public void removeFollwingUsers(User user) {
+        if (!this.followingUsers.contains(user)) {
+            throw new IllegalArgumentException("User already follows");
+        }
+        this.followingUsers.remove(user);
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Trip )) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Trip)) {
+            return false;
+        }
         return id != null && id.equals(((Trip) o).id);
     }
+
     @Override
     public int hashCode() {
         return 31;

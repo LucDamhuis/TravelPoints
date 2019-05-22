@@ -10,6 +10,7 @@ import com.mycompany.travelpoint.domain.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -31,12 +32,12 @@ public class TripDAOJPA extends Facade<Trip> implements TripDAO {
 
     @PersistenceContext(unitName = "persistence")
     private EntityManager em;
+    @Inject
+    @JPA
     UserDAOJPA userDAOJPA;
-
 
     public TripDAOJPA() {
         super(Trip.class);
-        userDAOJPA = new UserDAOJPA();
     }
 
     public TripDAOJPA(Class<Trip> entityClass) {
@@ -48,11 +49,9 @@ public class TripDAOJPA extends Facade<Trip> implements TripDAO {
         return em;
     }
 
-
     public void create(Trip entity) {
         super.create(entity);
     }
-
 
     public void edit(@PathParam("id") Long id, Trip entity) {
         super.edit(entity);
@@ -61,6 +60,7 @@ public class TripDAOJPA extends Facade<Trip> implements TripDAO {
     public void remove(@PathParam("id") Long id) {
         super.remove(super.find(id));
     }
+
     @Override
     public Trip findByName(String name) {
         TypedQuery<Trip> query = em.createNamedQuery("trip.findByname", Trip.class);
@@ -81,8 +81,8 @@ public class TripDAOJPA extends Facade<Trip> implements TripDAO {
         List<Trip> result = query.getResultList();
         return result;
     }
-    
-    public Trip addFollower(User user,  String tripname){
+
+    public Trip addFollower(User user, String tripname) {
         Trip t = findByName(tripname);
         ArrayList<User> followers = (ArrayList<User>) t.getFollowingUsers();
         followers.add(user);
@@ -90,26 +90,26 @@ public class TripDAOJPA extends Facade<Trip> implements TripDAO {
         em.persist(t);
         return t;
     }
-    
-    public Trip removeFollower(User user, String tripname){
+
+    public Trip removeFollower(User user, String tripname) {
         Trip t = findByName(tripname);
         ArrayList<User> followers = (ArrayList<User>) t.getFollowingUsers();
         followers.remove(user);
         em.persist(t);
         return t;
     }
-    
-        public Trip addFollower(String username,  String tripname){
+
+    public Trip addFollower(String username, String tripname) {
         Trip t = findByName(tripname);
-        ArrayList<User> followers = (ArrayList<User>) t.getFollowingUsers();
+        List<User> followers = t.getFollowingUsers();
         User user = userDAOJPA.findbyUsername(username);
         followers.add(user);
         t.setFollowingUsers(followers);
         em.persist(t);
         return t;
     }
-    
-    public Trip removeFollower(String username, String tripname){
+
+    public Trip removeFollower(String username, String tripname) {
         Trip t = findByName(tripname);
         ArrayList<User> followers = (ArrayList<User>) t.getFollowingUsers();
         User user = userDAOJPA.findbyUsername(username);
@@ -117,17 +117,19 @@ public class TripDAOJPA extends Facade<Trip> implements TripDAO {
         em.persist(t);
         return t;
     }
-    public Trip addTripTaker(String username,Trip trip){
+
+    public Trip addTripTaker(String username, Trip trip) {
         User user = userDAOJPA.findbyUsername(username);
         trip.setTripTaker(user);
         em.persist(trip);
-        
+
         ArrayList<Trip> trips = (ArrayList<Trip>) user.getTrips();
         trips.add(trip);
         user.setTrips(trips);
         em.persist(user);
         return trip;
     }
+
     public void setEm(EntityManager em) {
         this.em = em;
     }
