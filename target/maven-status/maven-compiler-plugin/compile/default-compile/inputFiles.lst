@@ -1,6 +1,8 @@
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\DAO\TripDAOColl.java
+C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\Services\CommentService.java
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\Services\Startup.java
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\DAO\TripDAO.java
+C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\DAO\CommentDAO.java
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\bean\StepBean.java
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\DAO\StepDAO.java
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\Rest\StepResource.java
@@ -14,13 +16,17 @@ C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\DAO\StepDA
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\com\mycompany\travelpoint\domain\Trip.java
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\DAO\UserDAOColl.java
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\Rest\JAXRSConfiguration.java
+C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\Services\AuthService.java
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\bean\UserBean.java
+C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\Rest\CommentResource.java
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\Rest\TripResource.java
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\Rest\UserResource.java
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\DAO\JPA.java
+C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\com\mycompany\travelpoint\domain\Comment.java
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\DAO\UserDAO.java
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\DAO\TripDAOJPA.java
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\DAO\Facade.java
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\com\mycompany\travelpoint\domain\User.java
+C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\DAO\CommentDAOJpa.java
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\com\mycompany\travelpoint\domain\Step.java
 C:\Users\Damhuis\Documents\NetBeansProjects\TravelPoint\src\main\java\Services\StepService.java

@@ -51,6 +51,15 @@ public class UserDAOColl implements UserDAO{
         }
         return null;
     }
+
+    @Override
+    public User find(Long id) {
+        return null;
+    }
+
+    @Override
+    public void edit(User user) {
+    }
     
     
     

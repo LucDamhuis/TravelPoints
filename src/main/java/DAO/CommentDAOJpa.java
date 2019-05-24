@@ -9,6 +9,8 @@ import com.mycompany.travelpoint.domain.Comment;
 import com.mycompany.travelpoint.domain.Step;
 import com.mycompany.travelpoint.domain.User;
 import java.util.List;
+import javax.ejb.Stateless;
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,16 +20,22 @@ import javax.persistence.TypedQuery;
  *
  * @author Damhuis
  */
+@Stateless
 @JPA
 public class CommentDAOJpa extends Facade<Comment> implements CommentDAO {
 
     @Inject
     @JPA
-    StepDAOJPA stepDAOJPA;
+    StepDAO stepDAOJPA;
+
+    public CommentDAOJpa() {
+         super(Comment.class);
+    }
     public CommentDAOJpa(Class<Comment> entityClass) {
         super(entityClass);
     }
 
+    
     @PersistenceContext(unitName = "persist")
     private EntityManager em;
 
@@ -54,6 +62,11 @@ public class CommentDAOJpa extends Facade<Comment> implements CommentDAO {
         query.setParameter("name", username);
         List<Comment> result = query.getResultList();
         return result;    
+    }
+
+    @Override
+    public List<Comment> findAll() {
+        return super.findAll();
     }
     
 }

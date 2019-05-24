@@ -20,9 +20,8 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "trip.findByname", query = "SELECT t FROM Trip t WHERE t.name = :name"),
-    @NamedQuery(name = "trip.findByUser", query = "SELECT t FROM Trip t WHERE t.tripTaker.username = :username")})
+    @NamedQuery(name = "trip.findByName", query = "SELECT t FROM Trip t WHERE t.name = :name")
+    //@NamedQuery(name = "trip.findByUser", query = "SELECT t FROM Trip t, User u WHERE t.tripTaker.userid = u.id AND u.username = :username")})
 public class Trip implements Serializable {
 
     @Id
@@ -33,8 +32,7 @@ public class Trip implements Serializable {
 
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne
     private User tripTaker;
 
     @OneToMany
@@ -48,14 +46,15 @@ public class Trip implements Serializable {
 
     private double endLon;
 
+    @OneToMany
     private List<User> followingUsers;
 
-    @Temporal(TemporalType.DATE)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ", timezone = "CET")
-    private Date startDate;
-    @Temporal(TemporalType.DATE)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ", timezone = "CET")
-    private Date endDate;
+//    @Temporal(TemporalType.DATE)
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ", timezone = "CET")
+//    private Date startDate;
+//    @Temporal(TemporalType.DATE)
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ", timezone = "CET")
+//    private Date endDate;
 
     public Trip() {
     }
@@ -72,19 +71,7 @@ public class Trip implements Serializable {
         this.followingUsers = new ArrayList<>();
     }
 
-    public Trip(String name, String description, User tripTaker, double startLat, double startLon, double endLat, double endLon, Date startDate, Date endDate) {
-        this.name = name;
-        this.description = description;
-        this.tripTaker = tripTaker;
-        this.startLat = startLat;
-        this.startLon = startLon;
-        this.endLat = endLat;
-        this.endLon = endLon;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.followingUsers = new ArrayList<>();
-        this.steps = new ArrayList<>();
-    }
+    
 
     public Long getId() {
         return id;

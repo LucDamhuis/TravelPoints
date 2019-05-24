@@ -10,6 +10,7 @@ import com.mycompany.travelpoint.domain.Step;
 import com.mycompany.travelpoint.domain.User;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Default;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -27,6 +28,7 @@ import javax.ws.rs.Produces;
  * @author Damhuis
  */
 @Stateless
+@JPA
 public class StepDAOJPA extends Facade<Step> implements StepDAO {
 
     @PersistenceContext(unitName = "persist")
@@ -60,7 +62,7 @@ public class StepDAOJPA extends Facade<Step> implements StepDAO {
         super.edit(entity);
     }
 
-    public void remove(@PathParam("id") Long id) {
+    public void removeById(@PathParam("id") Long id) {
         super.remove(super.find(id));
     }
 
@@ -84,6 +86,11 @@ public class StepDAOJPA extends Facade<Step> implements StepDAO {
     public void removeComment(Step s,Comment c){
         s.removeComment(c);
         em.persist(s);
+    }
+
+    @Override
+    public void remove(Step s) {
+        super.remove(s);
     }
 
 }

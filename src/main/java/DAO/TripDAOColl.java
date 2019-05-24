@@ -63,5 +63,13 @@ public class TripDAOColl implements TripDAO {
         }
         return returnTrips;
     }
+
+    @Override
+    public void edit(Trip trip) {
+    }
+
+    @Override
+    public void removeById(Long id) {
+    }
     
 }

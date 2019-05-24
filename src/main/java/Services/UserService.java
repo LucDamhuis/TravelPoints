@@ -26,7 +26,7 @@ public class UserService {
 
     @Inject
     @JPA
-    private UserDAOJPA userDAOJPA;
+    private UserDAO userDAOJPA;
 
     public void createUser(User user) {
         userDAO.create(user);
@@ -48,9 +48,7 @@ public class UserService {
         return userDAO.getAll();
     }
 
-    public int count() {
-        return userDAOJPA.count();
-    }
+
 
     public User findbyUsername(String username) {
         return userDAO.findbyUsername(username);

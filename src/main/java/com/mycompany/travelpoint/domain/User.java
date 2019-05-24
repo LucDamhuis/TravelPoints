@@ -39,14 +39,8 @@ public class User implements Serializable {
     private String email;
 
     @ManyToMany
+    @JsonIgnore
     private List<User> followingUsers;
-
-    @OneToMany(
-            mappedBy = "tripTaker",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<Trip> trips;
 
     @ManyToMany
     @JsonIgnore
@@ -142,23 +136,6 @@ public class User implements Serializable {
         }
         this.followingUsers.remove(user);
     }
-    public List<Trip> getTrips() {
-        return trips;
-    }
-
-    public void setTrips(List<Trip> trips) {
-        this.trips = trips;
-    }
-
-    public void addTrip(Trip t) {
-        trips.add(t);
-        t.setTripTaker(this);
-    }
-
-    public void removeTrip(Trip t) {
-        trips.remove(t);
-        t.setTripTaker(null);
-    }
 
     public List<Trip> getFollowingTrips() {
         return followingTrips;
@@ -202,5 +179,13 @@ public class User implements Serializable {
             throw new IllegalArgumentException("Step already exists");
         }
         this.followingSteps.add(step);
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

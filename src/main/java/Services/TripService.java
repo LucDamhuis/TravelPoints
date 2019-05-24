@@ -6,20 +6,24 @@
 package Services;
 
 import DAO.JPA;
+import DAO.TripDAO;
 import DAO.TripDAOJPA;
 import com.mycompany.travelpoint.domain.Trip;
 import java.util.List;
+import javax.ejb.Stateless;
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
 /**
  *
  * @author Damhuis
  */
+@Stateless
 public class TripService {
 
     @Inject
     @JPA
-    public TripDAOJPA tripDAOJPA;
+    public TripDAO tripDAOJPA;
 
     public void create(Trip trip) {
         tripDAOJPA.create(trip);
@@ -30,7 +34,7 @@ public class TripService {
     }
 
     public void remove(Long id) {
-        tripDAOJPA.remove(id);
+        tripDAOJPA.removeById(id);
     }
 
     public Trip findByName(String name) {

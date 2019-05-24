@@ -65,7 +65,7 @@ public class RestAssuredUser {
     @Test
     public void addUser() {
     
-        User user = new User("LucDam", "Luc", "Damhuis", "01-01-1993", "ldamhuis@hotmail.com","password");
+        User user = new User("LucDam", "Luc", "Damhuis", "01-01-1993", "ldamhuis@hotmail.com","password ");
         
         User us=given().
             contentType("application/json").

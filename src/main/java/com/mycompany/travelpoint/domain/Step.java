@@ -44,8 +44,8 @@ public class Step implements Serializable {
     @OneToMany()
     private List<Comment> comments;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date postDate;
+//    @Temporal(TemporalType.TIMESTAMP)
+//    private Date postDate;
 
     public Step(String name, String description, Double startLat, Double startLon, Double endLat, Double endLon) {
         this.name = name;
@@ -55,7 +55,7 @@ public class Step implements Serializable {
         this.endLat = endLat;
         this.endLon = endLon;
         this.followingUsers = new ArrayList<>();
-        this.postDate = new Date();
+        //this.postDate = new Date();
         this.comments = new ArrayList<>();
     }
 

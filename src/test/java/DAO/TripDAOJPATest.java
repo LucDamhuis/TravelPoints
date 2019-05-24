@@ -59,11 +59,11 @@ public class TripDAOJPATest {
     public void tearDown() {
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+     //TODO add test methods here.
+     //The methods must be annotated with annotation @Test. For example:
+    
+     @Test
+     public void hello() {}
     @org.junit.Test
     public void testCreateAndFind() {
         tx.begin();
@@ -86,7 +86,6 @@ public class TripDAOJPATest {
         tx.commit();
         Trip dbtrip = tripDAOJPA.findByName("Test");
         assertNotNull(dbtrip);
-
     }
 
     @org.junit.Test
@@ -103,17 +102,17 @@ public class TripDAOJPATest {
         assertNotNull(dbtrip);
     }
 
-//    @org.junit.Test
-//    public void testRemove() {
-//        tx.begin();
-//        Trip trip = new Trip("test", "testdescription", null, null, 15.0, 16.0, 17.0, 19.0, null);
-//        tripDAOJPA.create(trip);
-//        tx.commit();
-//        tx.begin();
-//        tripDAOJPA.remove(Long.valueOf(1));
-//        tx.commit();
-//        Trip dbtrip = tripDAOJPA.findByName("test");
-//        assertNull(dbtrip);
-//    }
+    @org.junit.Test
+    public void testRemove() {
+        tx.begin();
+        Trip trip = new Trip("test", "test", null, 0.0, 0.0, 0.0, 0.0);
+        tripDAOJPA.create(trip);
+        tx.commit();
+        tx.begin();
+        tripDAOJPA.removeById(Long.valueOf(trip.getId()));
+        tx.commit();
+        Trip dbtrip = tripDAOJPA.findByName("test");
+        assertNull(dbtrip);
+    }
 
 }

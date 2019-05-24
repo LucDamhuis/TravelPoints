@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Default;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -31,11 +33,13 @@ import javax.ws.rs.Produces;
 @Stateless
 @JPA
 public class UserDAOJPA extends Facade<User> implements UserDAO {
-    @EJB
-    private TripDAOJPA tripDAOJPA;
+    @Inject
+    @JPA
+    private TripDAO tripDAOJPA;
     
-    @EJB
-    private StepDAOJPA StepDAOJPA;
+    @Inject
+    @JPA
+    private StepDAO StepDAOJPA;
 
     @PersistenceContext(unitName = "persist")
     private EntityManager em;
@@ -82,7 +86,11 @@ public class UserDAOJPA extends Facade<User> implements UserDAO {
     public User findbyUsername(String username) {
         TypedQuery<User> query = em.createNamedQuery("user.findByname", User.class);
         query.setParameter("name", username);
-        List<User> result = query.getResultList();
+        List<User> result = new ArrayList<>();
+        result = query.getResultList();
+        if(result.isEmpty()){
+            return null;
+        }
         return result.get(0);
     }
 
@@ -92,16 +100,7 @@ public class UserDAOJPA extends Facade<User> implements UserDAO {
     }
         
     
-    public User addTrip(User user, Trip trip){
-        List<Trip> trips = user.getTrips();
-        trips.add(trip);
-        em.persist(user);
-        
-        trip.setTripTaker(user);
-        tripDAOJPA.edit(trip);
-        
-        return user;
-    }
+   
     
     public User addFollowingTrip(User user,Trip trip){
         user.addFollowingTrip(trip);

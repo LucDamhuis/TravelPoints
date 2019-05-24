@@ -19,4 +19,6 @@ public interface CommentDAO {
     void remove(Comment comment);
 
     List<Comment> findCommentsofUser (String username);
+    
+    List<Comment> findAll();
 }

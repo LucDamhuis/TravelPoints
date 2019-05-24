@@ -5,6 +5,7 @@
  */
 package DAO;
 
+import com.mycompany.travelpoint.domain.Comment;
 import com.mycompany.travelpoint.domain.Step;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class StepDAOColl implements StepDAO {
 
     @Override
     public void remove(Step step) {
-        steps.add(step);
+        steps.remove(step);
     }
 
     @Override
@@ -47,4 +48,31 @@ public class StepDAOColl implements StepDAO {
         }
         return returnSteps;
     } 
+
+    @Override
+    public void edit(Step step) {
+    }
+
+    @Override
+    public Step find(Long id) {
+        return null;
+    }
+
+    @Override
+    public void addComment(Step s, Comment c) {
+    }
+
+    @Override
+    public void removeComment(Step s, Comment c) {
+    }
+
+    @Override
+    public void removeById(Long id) {
+
+    }
+
+    @Override
+    public List<Step> findAll() {
+        return null;
+    }
 }

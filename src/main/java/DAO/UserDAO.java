@@ -17,5 +17,7 @@ public interface UserDAO {
     void create(User user);
     void remove (User user);
     User findbyUsername(String username);
+    User find(Long id);
+    void edit(User user);
     List<User> getAll();
 }

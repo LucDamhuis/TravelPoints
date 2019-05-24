@@ -99,6 +99,4 @@ public class TripDAOCollTest {
         assertEquals(expResult, result);
     }
 
-    
-
-}
+   }

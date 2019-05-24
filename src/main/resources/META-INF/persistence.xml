@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-    <persistence-unit name="persistence" transaction-type="JTA">
-        <properties>
-            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
-        </properties>
-    </persistence-unit>
-  <persistence-unit name="TestPU">
-    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>com.mycompany.travelpoint.domain.Step</class>
+  <persistence-unit name="persist" transaction-type="JTA">
+    <!-- Dont forget to inform to your persistence.xml the datasource name -->
+    <jta-data-source>java:jboss/datasources/social_network-ds</jta-data-source>
+    <!-- Note: If you need to run a main class to popolate your database, remove the tag above -->
+    <!-- Once your are using a datasource, is not required to configure properties below -->
+    <properties>
+      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+    </properties>
+  </persistence-unit>
+    <persistence-unit name="TestPU">
+  <class>com.mycompany.travelpoint.domain.Step</class>
     <class>com.mycompany.travelpoint.domain.Trip</class>
     <class>com.mycompany.travelpoint.domain.User</class>
+    <class>com.mycompany.travelpoint.domain.Comment</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.logging.level" value="INFO"/>

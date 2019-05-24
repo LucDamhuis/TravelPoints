@@ -6,21 +6,24 @@
 package Services;
 
 import DAO.JPA;
+import DAO.StepDAO;
 import DAO.StepDAOJPA;
 import com.mycompany.travelpoint.domain.Comment;
 import com.mycompany.travelpoint.domain.Step;
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 /**
  *
  * @author Damhuis
  */
+@Stateless
 public class StepService {
     
     @Inject
     @JPA
-    public StepDAOJPA stepDAOJPA;
+    public StepDAO stepDAOJPA;
 
     public void create(Step step) {
         stepDAOJPA.create(step);
@@ -31,7 +34,7 @@ public class StepService {
     }
 
     public void remove(Long id) {
-        stepDAOJPA.remove(id);
+        stepDAOJPA.removeById(id);
     }
 
     public Step findByName(String name) {

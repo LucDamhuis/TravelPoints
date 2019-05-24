@@ -40,7 +40,7 @@ public class UserResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllUsers() {
-        GenericEntity ge = new GenericEntity<List<User>>(us.findAll()){    
+        GenericEntity ge = new GenericEntity<List<User>>(us.findAll()){     
         };
         return Response.ok(ge).build();
     }
@@ -48,7 +48,7 @@ public class UserResource {
     @GET
     @Path("{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response geByName(@PathParam("name") String name) {
+    public Response getByName(@PathParam("name") String name) {
         User user = us.findbyUsername(name);
         if(user == null){
             throw new WebApplicationException(Response.Status.NOT_FOUND);
@@ -81,9 +81,9 @@ public class UserResource {
     }
 
     @DELETE
-    @Path("{name}")
-    public Response deleteUser(@PathParam("name") String name) {
-        User u = us.findbyUsername(name);
+    @Path("{id}")
+    public Response deleteUser(@PathParam("id") long id) {
+        User u = us.findbyId(id);
         us.remove(u);
         return Response.noContent().build();
     }

@@ -10,6 +10,7 @@ import com.mycompany.travelpoint.domain.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,11 +31,11 @@ import javax.ws.rs.PathParam;
 @JPA
 public class TripDAOJPA extends Facade<Trip> implements TripDAO {
 
-    @PersistenceContext(unitName = "persistence")
+    @PersistenceContext(unitName = "persist")
     private EntityManager em;
     @Inject
     @JPA
-    UserDAOJPA userDAOJPA;
+    UserDAO userDAOJPA;
 
     public TripDAOJPA() {
         super(Trip.class);
@@ -56,22 +57,31 @@ public class TripDAOJPA extends Facade<Trip> implements TripDAO {
     public void edit(@PathParam("id") Long id, Trip entity) {
         super.edit(entity);
     }
+    
+    public void remove(Trip trip){
+        super.remove(trip);
+    }
 
-    public void remove(@PathParam("id") Long id) {
+    public void removeById(@PathParam("id") Long id) {
         super.remove(super.find(id));
     }
 
     @Override
     public Trip findByName(String name) {
-        TypedQuery<Trip> query = em.createNamedQuery("trip.findByname", Trip.class);
+        TypedQuery<Trip> query = em.createNamedQuery("trip.findByName", Trip.class);
         query.setParameter("name", name);
-        List<Trip> result = query.getResultList();
+        List<Trip> result = new ArrayList<>();
+        result = query.getResultList();
+        if(result.isEmpty()){
+            return null;
+        }
         return result.get(0);
     }
 
     @Override
     public List<Trip> getAllTrips() {
-        return super.findAll();
+        List<Trip> trips = super.findAll();
+        return trips;
     }
 
     @Override
@@ -122,11 +132,6 @@ public class TripDAOJPA extends Facade<Trip> implements TripDAO {
         User user = userDAOJPA.findbyUsername(username);
         trip.setTripTaker(user);
         em.persist(trip);
-
-        ArrayList<Trip> trips = (ArrayList<Trip>) user.getTrips();
-        trips.add(trip);
-        user.setTrips(trips);
-        em.persist(user);
         return trip;
     }
 

@@ -5,6 +5,7 @@
  */
 package DAO;
 
+import com.mycompany.travelpoint.domain.Comment;
 import com.mycompany.travelpoint.domain.Step;
 import java.util.List;
 
@@ -13,9 +14,23 @@ import java.util.List;
  * @author Damhuis
  */
 public interface StepDAO {
-    
+
+    void edit(Step step);
+
     void create(Step step);
-    void remove (Step step);
-    Step findByName(String name);
+
+    void remove(Step step);
     
+    void removeById(Long id);
+    
+    List<Step> findAll();
+    
+    Step find(Long id);
+
+    Step findByName(String name);
+
+    void addComment(Step s, Comment c);
+
+    void removeComment(Step s, Comment c);
+
 }
