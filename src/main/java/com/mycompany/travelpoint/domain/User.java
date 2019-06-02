@@ -9,10 +9,13 @@ package com.mycompany.travelpoint.domain;
  *
  * @author Damhuis
  */
+import HATEOS.Link;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -20,13 +23,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "tripuser")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "user.findByname", query = "SELECT u FROM User u WHERE u.username = :name"),
-    @NamedQuery(name = "user.count", query = "SELECT COUNT(u) FROM User u")})
+    @NamedQuery(name = "user.findByname", query = "SELECT u FROM User u WHERE u.username = :name OR u.email = :name"),
+    @NamedQuery(name = "user.loginEmail", query = "SELECT u FROM User u WHERE u.email =:email AND u.password = :password"),
+    @NamedQuery(name = "user.loginUsername", query = "SELECT u FROM User u WHERE u.username =:username AND u.password = : password"),
+    @NamedQuery(name = "user.count", query = "SELECT COUNT(u) FROM User u"),
+    @NamedQuery(name = "user.getFollowing", query = "SELECT u FROM User u WHERE :user MEMBER OF u.followingUsers ")})
 public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     private String username;
 
@@ -38,7 +52,7 @@ public class User implements Serializable {
 
     private String email;
 
-    @ManyToMany
+    @OneToMany
     @JsonIgnore
     private List<User> followingUsers;
 
@@ -50,7 +64,13 @@ public class User implements Serializable {
     @JsonIgnore
     private List<Step> followingSteps;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Role role;
+
     private String password;
+
+    @Transient
+    private Set<Link> links = new HashSet<>();
 
     public User() {
     }
@@ -65,6 +85,22 @@ public class User implements Serializable {
         this.followingTrips = new ArrayList<>();
         this.followingSteps = new ArrayList<>();
         this.password = password;
+        this.links = new HashSet<>();
+
+    }
+
+    public User(String username, String firstname, String lastname, String dob, String email, String password, Role role) {
+        this.username = username;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.dob = dob;
+        this.email = email;
+        this.role = role;
+        this.followingUsers = new ArrayList<>();
+        this.followingTrips = new ArrayList<>();
+        this.followingSteps = new ArrayList<>();
+        this.password = password;
+        this.links = new HashSet<>();
     }
 
     public Long getId() {
@@ -129,12 +165,12 @@ public class User implements Serializable {
         }
         this.followingUsers.remove(user);
     }
-    
+
     public void addFollowingUser(User user) {
         if (this.followingUsers.contains(user)) {
             throw new IllegalArgumentException("User doenst exists");
         }
-        this.followingUsers.remove(user);
+        this.followingUsers.add(user);
     }
 
     public List<Trip> getFollowingTrips() {
@@ -188,4 +224,18 @@ public class User implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public Set<Link> getLinks() {
+        return links;
+    }
+
+    public void setLinks(Set<Link> links) {
+        this.links = links;
+    }
+
+    public void addLink(String url, String rel) {
+        Link link = new Link(url, rel);
+        links.add(link);
+    }
+
 }

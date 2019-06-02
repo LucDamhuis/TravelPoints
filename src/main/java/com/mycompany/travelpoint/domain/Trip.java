@@ -5,14 +5,19 @@
  */
 package com.mycompany.travelpoint.domain;
 
+import HATEOS.Link;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  *
@@ -20,8 +25,9 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @XmlRootElement
-    @NamedQuery(name = "trip.findByName", query = "SELECT t FROM Trip t WHERE t.name = :name")
-    //@NamedQuery(name = "trip.findByUser", query = "SELECT t FROM Trip t, User u WHERE t.tripTaker.userid = u.id AND u.username = :username")})
+@NamedQueries({
+@NamedQuery(name = "trip.findByName", query = "SELECT t FROM Trip t WHERE t.name = :name"),
+@NamedQuery(name = "trip.findByUser", query = "SELECT t FROM Trip t WHERE t.tripTaker.id = :id")})
 public class Trip implements Serializable {
 
     @Id
@@ -35,7 +41,7 @@ public class Trip implements Serializable {
     @ManyToOne
     private User tripTaker;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Step> steps;
 
     private double startLat;
@@ -46,8 +52,12 @@ public class Trip implements Serializable {
 
     private double endLon;
 
-    @OneToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany()
     private List<User> followingUsers;
+
+    @Transient
+    private Set<Link> links = new HashSet<>();
 
 //    @Temporal(TemporalType.DATE)
 //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ", timezone = "CET")
@@ -55,7 +65,6 @@ public class Trip implements Serializable {
 //    @Temporal(TemporalType.DATE)
 //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ", timezone = "CET")
 //    private Date endDate;
-
     public Trip() {
     }
 
@@ -69,9 +78,8 @@ public class Trip implements Serializable {
         this.endLat = endLat;
         this.endLon = endLon;
         this.followingUsers = new ArrayList<>();
+        this.links = new HashSet<>();
     }
-
-    
 
     public Long getId() {
         return id;
@@ -105,7 +113,6 @@ public class Trip implements Serializable {
         this.tripTaker = tripTaker;
     }
 
-    @XmlTransient
     public List<Step> getSteps() {
         return steps;
     }
@@ -197,4 +204,20 @@ public class Trip implements Serializable {
     public int hashCode() {
         return 31;
     }
+    
+    public Set<Link> getLinks() {
+        return links;
+    }
+
+    public void setLinks(Set<Link> links) {
+        this.links = links;
+    }
+
+    public void addLink(String url, String rel) {
+        Link link = new Link(url, rel);
+        links = new HashSet<>();
+        links.add(link);
+    }
+
+
 }

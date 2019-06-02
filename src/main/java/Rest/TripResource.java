@@ -14,7 +14,12 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.Path;
+import HATEOS.Link;
+import JWT.JWTTokenNeeded;
+import com.mycompany.travelpoint.domain.Step;
+import java.util.Set;
 import javax.ws.rs.core.*;
+import javax.ws.rs.core.UriBuilder.*;
 
 /**
  *
@@ -24,34 +29,88 @@ import javax.ws.rs.core.*;
 @Api
 @Stateless
 public class TripResource {
-    
+
     @Inject
     private TripService ts;
-    
+
+    @Context
+    private UriInfo uriInfo;
+
     @GET
+    @JWTTokenNeeded({"User"})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllTrips() {
-        GenericEntity ge = new GenericEntity<List<Trip>>(ts.getAllTrips()){    
-        };
-        return Response.ok(ge).build();
+        List<Trip> trips = ts.getAllTrips();
+        for (Trip trip : trips) {
+            String link = getUriForSelf();
+            Link newSelfLink = new Link(link, "self");
+            Link stepsLink = new Link("http://localhost:8080/TravelPoint/api/trips/" + trip.getId().toString() + "/steps", "steps");
+            Link userLink = new Link("http://localhost:8080/TravelPoint/api/users/" + trip.getTripTaker().getId().toString() + "/id", "triptaker");
+            Set<Link> links = trip.getLinks();
+            links.add(newSelfLink);
+            links.add(stepsLink);
+            links.add(userLink);
+            trip.setLinks(links);
+        }
+        return Response.ok(trips).build();
     }
 
     @GET
-    @Path("{name}")
+    @JWTTokenNeeded({"User"})
+    @Path("{id}/userid")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response geByName(@PathParam("name") String name) {
-        Trip trip = ts.findByName(name);
-        if(ts == null){
+    public Response getAllTripsOfUser(@PathParam("id") Long id) {
+        List<Trip> trips = ts.getAllTripsOfUser(id);
+         for (Trip trip : trips) {
+            String link = getUriForSelf();
+            Link newSelfLink = new Link(link, "self");
+            Link stepsLink = new Link("http://localhost:8080/TravelPoint/api/trips/" + trip.getId().toString() + "/steps", "steps");
+            Link userLink = new Link("http://localhost:8080/TravelPoint/api/users/" + trip.getTripTaker().getId().toString() + "/id", "triptaker");
+            Set<Link> links = trip.getLinks();
+            links.add(newSelfLink);
+            links.add(stepsLink);
+            links.add(userLink);
+            trip.setLinks(links);
+        }
+        return Response.ok(trips).build();
+    }
+
+    @GET
+    @JWTTokenNeeded({"User"})
+    @Path("{id}/id")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response geByID(@PathParam("id") Long id) {
+        Trip trip = ts.findById(id);
+        String link = getUriForSelf();
+        Link stepsLink = new Link("http://localhost:8080/TravelPoint/api/trips/" + id + "/steps", "steps");
+        Link userLink = new Link("http://localhost:8080/TravelPoint/api/users/" + trip.getTripTaker().getId().toString() + "/id", "triptaker");
+        Set<Link> links = trip.getLinks();
+        links.add(stepsLink);
+        links.add(userLink);
+        trip.setLinks(links);
+        if (ts == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        return Response.ok(ts).build();
+        return Response.ok(trip).build();
+    }
+
+    @GET
+    @JWTTokenNeeded({"User"})
+    @Path("{id}/steps")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllStepsOfTrip(@PathParam("id") long id) {
+        Trip trip = ts.findById(id);
+        List<Step> steps = trip.getSteps();
+        return Response.ok(steps).build();
     }
 
     @POST
+    @JWTTokenNeeded({"User"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response createUser(Trip trip) {
-        if(trip == null){
+    @Path("create")
+    public Response createTrip(Trip trip) {
+        if (trip == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         ts.create(trip);
@@ -60,10 +119,11 @@ public class TripResource {
     }
 
     @DELETE
+    @JWTTokenNeeded({"User"})
     @Path("{name}")
-    public Response deleteUser(@PathParam("name") String name) {
+    public Response deleteTrip(@PathParam("name") String name) {
         Trip trip = ts.findByName(name);
-        if(trip==null){
+        if (trip == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         ts.remove(trip.getId());
@@ -71,14 +131,22 @@ public class TripResource {
     }
 
     @PUT
+    @JWTTokenNeeded({"User"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response editUser(Trip trip) {
+    public Response editTrip(Trip trip) {
         Trip foundtrip = ts.findByName(trip.getName());
-        if(foundtrip == null){
+        if (foundtrip == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         ts.edit(trip);
         return Response.ok(foundtrip).build();
     }
+
+    private String getUriForSelf() {
+        return uriInfo.getAbsolutePathBuilder()
+                .build()
+                .toString();
+    }
+
 }

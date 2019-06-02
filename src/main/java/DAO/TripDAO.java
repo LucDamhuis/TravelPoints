@@ -18,8 +18,9 @@ public interface TripDAO {
     void remove (Trip trip);
     void edit(Trip trip);
     void removeById(Long id);
+    Trip find(Long id);
     Trip findByName(String name);
     List<Trip> getAllTrips();
-    List<Trip> getAllTripsOfUser(String username);
+    List<Trip> getAllTripsOfUser(Long id);
     
 }

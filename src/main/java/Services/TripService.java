@@ -45,8 +45,11 @@ public class TripService {
         return tripDAOJPA.getAllTrips();
     }
 
-    public List<Trip> getAllTripsOfUser(String username) {
-        return tripDAOJPA.getAllTripsOfUser(username);
+    public List<Trip> getAllTripsOfUser(Long id) {
+        return tripDAOJPA.getAllTripsOfUser(id);
+    }
+    public Trip findById(Long id){
+        return tripDAOJPA.find(id);
     }
     
 }

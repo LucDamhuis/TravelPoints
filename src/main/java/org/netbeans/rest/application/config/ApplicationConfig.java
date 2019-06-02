@@ -29,6 +29,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(JWT.JWTTokenNeededFilter.class);
         resources.add(Rest.CommentResource.class);
         resources.add(Rest.StepResource.class);
         resources.add(Rest.TripResource.class);

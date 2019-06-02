@@ -16,6 +16,7 @@ import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -33,10 +34,11 @@ import javax.ws.rs.Produces;
 @Stateless
 @JPA
 public class UserDAOJPA extends Facade<User> implements UserDAO {
+
     @Inject
     @JPA
     private TripDAO tripDAOJPA;
-    
+
     @Inject
     @JPA
     private StepDAO StepDAOJPA;
@@ -88,7 +90,7 @@ public class UserDAOJPA extends Facade<User> implements UserDAO {
         query.setParameter("name", username);
         List<User> result = new ArrayList<>();
         result = query.getResultList();
-        if(result.isEmpty()){
+        if (result.isEmpty()) {
             return null;
         }
         return result.get(0);
@@ -98,29 +100,63 @@ public class UserDAOJPA extends Facade<User> implements UserDAO {
     public List<User> getAll() {
         return super.findAll();
     }
-        
-    
-   
-    
-    public User addFollowingTrip(User user,Trip trip){
+
+    public User addFollowingTrip(User user, Trip trip) {
         user.addFollowingTrip(trip);
         em.persist(user);
-        
+
         trip.addFollwingUsers(user);
         tripDAOJPA.edit(trip);
         return user;
     }
-    
-    public User addFollowingStep(User user, Step step){
+
+    public User addFollowingStep(User user, Step step) {
         user.addFollowingStep(step);
         em.persist(user);
-        
+
         step.addFollwingUsers(user);
         StepDAOJPA.edit(step);
-        return user;        
+        return user;
     }
+
     public void setEm(EntityManager em) {
         this.em = em;
+    }
+
+    @Override
+    public List<User> getFollowing(long id) {
+        User u = this.find(id);
+        TypedQuery<User> query = em.createNamedQuery("user.getFollowing", User.class);
+        query.setParameter("user", u);
+        List<User> followers = u.getFollowingUsers();
+        if (followers.isEmpty()) {
+            return new ArrayList<User>();
+        }
+        return followers;
+    }
+
+    @Override
+    public boolean loginCheckUsername(String username, String password) {
+        TypedQuery<User> query = em.createNamedQuery("user.loginUsername", User.class);
+        query.setParameter("username", username);
+        query.setParameter("password", password);
+        List<User> users = query.getResultList();
+        if (users != null) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean loginCheckEmail(String email, String password) {
+        TypedQuery<User> query = em.createNamedQuery("user.loginEmail", User.class);
+        query.setParameter("email", email);
+        query.setParameter("password", password);
+        List<User> users = query.getResultList();
+        if (users != null) {
+            return true;
+        }
+        return false;
     }
 
 }

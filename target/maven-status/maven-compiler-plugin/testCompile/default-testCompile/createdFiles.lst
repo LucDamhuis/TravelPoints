@@ -1,0 +1,4 @@
+Rest\RestAssuredStep.class
+Rest\RestAssuredTrip.class
+Rest\RestAssuredUser.class
+util\DatabaseCleaner.class

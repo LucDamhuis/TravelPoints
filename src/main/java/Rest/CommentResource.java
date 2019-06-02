@@ -5,6 +5,7 @@
  */
 package Rest;
 
+import JWT.JWTTokenNeeded;
 import Services.CommentService;
 import Services.UserService;
 import com.mycompany.travelpoint.domain.Comment;
@@ -36,34 +37,38 @@ import javax.ws.rs.core.Response;
 @Api
 @Stateless
 public class CommentResource {
+
     @Inject
     private CommentService cs;
 
     @GET
+    @JWTTokenNeeded({"User"})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllComments() {
-        GenericEntity ge = new GenericEntity<List<Comment>>(cs.findAll()){    
+        GenericEntity ge = new GenericEntity<List<Comment>>(cs.findAll()) {
         };
+        
         return Response.ok(ge).build();
     }
 
     @GET
     @Path("{username}")
+    @JWTTokenNeeded({"User"})
     @Produces(MediaType.APPLICATION_JSON)
     public Response geByUserName(@PathParam("name") String name) {
         List<Comment> comments = cs.findAllOfUser(name);
-        if(comments.isEmpty()){
+        if (comments.isEmpty()) {
             comments = new ArrayList<>();
         }
         return Response.ok(comments).build();
     }
 
-
     @POST
+    @JWTTokenNeeded({"User"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createComment(Comment comment) {
-        if(comment == null){
+        if (comment == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         cs.create(comment);
@@ -72,12 +77,13 @@ public class CommentResource {
     }
 
     @DELETE
+    @JWTTokenNeeded({"User"})
     @Path("{id}")
     public Response deleteComment(@PathParam("id") long id) {
         List<Comment> comments = cs.findAll();
         Comment c = null;
         for (Comment comment : comments) {
-            if(comment.getCommentId()==id){
+            if (comment.getCommentId() == id) {
                 c = comment;
             }
         }

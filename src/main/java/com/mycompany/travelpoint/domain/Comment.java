@@ -5,7 +5,10 @@
  */
 package com.mycompany.travelpoint.domain;
 
+import HATEOS.Link;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +17,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -23,17 +27,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "comment.findByUsername", query = "SELECT c FROM Comment c WHERE c.userName = :name"),
-    })
+    @NamedQuery(name = "comment.findByUsername", query = "SELECT c FROM Comment c WHERE c.userName = :name"),})
 public class Comment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int commentId;
     private long stepId;
     private String userName;
     private String comment;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date postDate;
+    
+
+  
 
     public Comment() {
     }
@@ -42,6 +47,7 @@ public class Comment {
         this.stepId = stepId;
         this.userName = userName;
         this.comment = comment;
+
     }
 
     public int getCommentId() {
@@ -76,14 +82,8 @@ public class Comment {
         this.comment = comment;
     }
 
-    public Date getPostDate() {
-        return postDate;
-    }
 
-    public void setPostDate(Date postDate) {
-        this.postDate = postDate;
-    }
-    
-    
-    
+
+
+
 }

@@ -1,8 +1,0 @@
-#surefire
-#Fri May 24 16:14:51 CEST 2019
-maven.ext.class.path=C\:\\Program Files\\NetBeans 8.0.2\\java\\maven-nblib\\netbeans-eventspy.jar
-user.dir=C\:\\Users\\Damhuis\\Documents\\NetBeansProjects\\TravelPoint
-file.encoding=UTF-8
-localRepository=C\:\\Users\\Damhuis\\.m2\\repository
-basedir=C\:\\Users\\Damhuis\\Documents\\NetBeansProjects\\TravelPoint
-test=DAO.TripDAOJPATest

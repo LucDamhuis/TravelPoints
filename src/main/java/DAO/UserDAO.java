@@ -20,4 +20,9 @@ public interface UserDAO {
     User find(Long id);
     void edit(User user);
     List<User> getAll();
+    List<User> getFollowing(long id);
+
+    public boolean loginCheckUsername(String username, String password);
+
+    public boolean loginCheckEmail(String email, String password);
 }

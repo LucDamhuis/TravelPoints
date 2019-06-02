@@ -48,9 +48,19 @@ public class UserService {
         return userDAO.getAll();
     }
 
-
+    public List<User> getFollowing(Long id) {
+        return userDAO.getFollowing(id);
+    }
 
     public User findbyUsername(String username) {
         return userDAO.findbyUsername(username);
+    }
+    
+    public boolean loginCheckUsername(String username,String password){
+        return userDAO.loginCheckUsername(username,password);
+    }
+    
+    public boolean loginCheckEmail(String email,String password){
+        return userDAO.loginCheckEmail(email,password);
     }
 }

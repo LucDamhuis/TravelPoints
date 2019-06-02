@@ -85,9 +85,9 @@ public class TripDAOJPA extends Facade<Trip> implements TripDAO {
     }
 
     @Override
-    public List<Trip> getAllTripsOfUser(String username) {
+    public List<Trip> getAllTripsOfUser(Long id) {
         TypedQuery<Trip> query = em.createNamedQuery("trip.findByUser", Trip.class);
-        query.setParameter("name", username);
+        query.setParameter("id", id);
         List<Trip> result = query.getResultList();
         return result;
     }
@@ -137,6 +137,11 @@ public class TripDAOJPA extends Facade<Trip> implements TripDAO {
 
     public void setEm(EntityManager em) {
         this.em = em;
+    }
+
+    @Override
+    public Trip find(Long id) {
+        return super.find(id);
     }
 
 }

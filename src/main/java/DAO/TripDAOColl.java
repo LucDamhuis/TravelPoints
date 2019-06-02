@@ -44,10 +44,10 @@ public class TripDAOColl implements TripDAO {
     }
 
     @Override
-    public List<Trip> getAllTripsOfUser(String username) {
+    public List<Trip> getAllTripsOfUser(Long id) {
         ArrayList<Trip> returnTrips = new ArrayList<>();
         for (Trip t : trips) {
-            if(t.getTripTaker().getUsername().equals(username)){
+            if(t.getTripTaker().getId().equals(id)){
                 returnTrips.add(t);
             }
         }
@@ -70,6 +70,11 @@ public class TripDAOColl implements TripDAO {
 
     @Override
     public void removeById(Long id) {
+    }
+
+    @Override
+    public Trip find(Long id) {
+        return null;
     }
     
 }

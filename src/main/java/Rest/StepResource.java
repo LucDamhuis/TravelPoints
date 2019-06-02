@@ -5,6 +5,7 @@
  */
 package Rest;
 
+import JWT.JWTTokenNeeded;
 import Services.StepService;
 import com.mycompany.travelpoint.domain.Step;
 import io.swagger.annotations.Api;
@@ -23,34 +24,37 @@ import javax.ws.rs.core.*;
 @Api
 @Stateless
 public class StepResource {
-    
+
     @Inject
     private StepService ss;
-    
+
     @GET
+    @JWTTokenNeeded({"User"})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllSteps() {
-        GenericEntity ge = new GenericEntity<List<Step>>(ss.getAllSteps()){    
+        GenericEntity ge = new GenericEntity<List<Step>>(ss.getAllSteps()) {
         };
         return Response.ok(ge).build();
     }
 
     @GET
     @Path("{name}")
+    @JWTTokenNeeded({"User"})
     @Produces(MediaType.APPLICATION_JSON)
     public Response geByName(@PathParam("name") String name) {
         Step step = ss.findByName(name);
-        if(step == null){
+        if (step == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         return Response.ok(ss).build();
     }
 
     @POST
+    @JWTTokenNeeded({"User"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response createStep(Step step) {
-        if(step == null){
+        if (step == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         ss.create(step);
@@ -59,10 +63,11 @@ public class StepResource {
     }
 
     @DELETE
+    @JWTTokenNeeded({"User"})
     @Path("{name}")
     public Response deleteStep(@PathParam("name") String name) {
         Step step = ss.findByName(name);
-        if(step==null){
+        if (step == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         ss.remove(step.getId());
@@ -70,15 +75,16 @@ public class StepResource {
     }
 
     @PUT
+    @JWTTokenNeeded({"User"})
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Response editStep(Step step) {
         Step foundStep = ss.findByName(step.getName());
-        if(foundStep == null){
+        if (foundStep == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
         ss.edit(step);
         return Response.ok(foundStep).build();
     }
-    
+
 }

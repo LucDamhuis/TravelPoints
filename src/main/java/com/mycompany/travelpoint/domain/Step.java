@@ -9,10 +9,13 @@ package com.mycompany.travelpoint.domain;
  *
  * @author Damhuis
  */
+import HATEOS.Link;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -38,15 +41,17 @@ public class Step implements Serializable {
 
     private Double endLon;
 
-    @ManyToMany(mappedBy = "followingSteps")
+    @ManyToMany(mappedBy = "followingSteps", fetch = FetchType.EAGER)
     private List<User> followingUsers;
 
     @OneToMany()
     private List<Comment> comments;
 
+    @Transient
+    private Set<Link> links;
+
 //    @Temporal(TemporalType.TIMESTAMP)
 //    private Date postDate;
-
     public Step(String name, String description, Double startLat, Double startLon, Double endLat, Double endLon) {
         this.name = name;
         this.description = description;
@@ -57,6 +62,8 @@ public class Step implements Serializable {
         this.followingUsers = new ArrayList<>();
         //this.postDate = new Date();
         this.comments = new ArrayList<>();
+        this.links = new HashSet<>();
+
     }
 
     public Step() {
@@ -152,6 +159,19 @@ public class Step implements Serializable {
             throw new IllegalArgumentException("Comments already removed");
         }
         this.comments.remove(comment);
+    }
+
+    public Set<Link> getLinks() {
+        return links;
+    }
+
+    public void setLinks(Set<Link> links) {
+        this.links = links;
+    }
+
+    public void addLink(String url, String rel) {
+        Link link = new Link(url, rel);
+        links.add(link);
     }
 
 }

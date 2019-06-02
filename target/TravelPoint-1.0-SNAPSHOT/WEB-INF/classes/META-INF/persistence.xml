@@ -9,12 +9,12 @@
       <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
     </properties>
   </persistence-unit>
-    <persistence-unit name="TestPU">
-  <class>com.mycompany.travelpoint.domain.Step</class>
+  <persistence-unit name="TestPU">
+    <class>com.mycompany.travelpoint.domain.Step</class>
     <class>com.mycompany.travelpoint.domain.Trip</class>
     <class>com.mycompany.travelpoint.domain.User</class>
     <class>com.mycompany.travelpoint.domain.Comment</class>
-    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.logging.level" value="INFO"/>
       <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>

@@ -60,6 +60,21 @@ public class UserDAOColl implements UserDAO{
     @Override
     public void edit(User user) {
     }
+
+    @Override
+    public List<User> getFollowing(long id) {
+        return null;
+    }
+
+    @Override
+    public boolean loginCheckUsername(String username, String password) {
+        return true;
+    }
+
+    @Override
+    public boolean loginCheckEmail(String email, String password) {
+        return true;
+    }
     
     
     
